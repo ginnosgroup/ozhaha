@@ -22,8 +22,8 @@ require 'app/code/my_orderhistory_code.php';
 <body>
 <div class="page-group">
 	<div id="page-my-orderhistory-list" class="page">
-	  <?php include('app/include/main_header.php')?>  	
-  	<?php include('app/include/main_footer.php')?>
+	  <?php include('app/include/main_header.php');?>  	
+  	<?php include('app/include/main_footer.php');?>
   	
   	<div class="content">
   			<div class="buttons-tab">
@@ -50,7 +50,7 @@ require 'app/code/my_orderhistory_code.php';
 </div>
 <script src="SUI-Mobile/dist/js/sm.js"></script>
 <script src="SUI-Mobile/dist/js/sm-extend.js"></script>
-<?php include('app/include/main_gps_update.php')?>
-<script src="SUI-Mobile/assets/js/page_init.js"></script>
+<?php include('app/include/main_gps_update.php');?>
+<script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("Ymd");?>'></script>
 </body>
 </html>

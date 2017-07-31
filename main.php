@@ -20,7 +20,6 @@ require 'app/code/main_code.php';
 <link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css">
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="SUI-Mobile/assets/js/zepto.min.js"></script>
-
 </head>
 <body>
 <div class="page-group">
@@ -50,7 +49,7 @@ require 'app/code/main_code.php';
 <script src="SUI-Mobile/dist/js/aes.js"></script>
 <script src="SUI-Mobile/dist/js/aes-json-format.js"></script>
 <?php include('app/include/main_gps_update.php');?>
-<script src="SUI-Mobile/assets/js/page_init.js"></script>
+<script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("Ymd");?>'></script>
 </body>
 <script>
 $(document).on('refresh', '.pull-to-refresh-content',function(e) {

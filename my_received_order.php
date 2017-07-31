@@ -11,6 +11,8 @@ require 'app/code/my_order_code.php';
 <meta name="description" content="此接口仅限 Panda Delivery 配送员使用。">
 <meta name="author" content="ozhaha">
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<meta http-equiv="Cache-Control" content="max-age=172800" />
+<meta http-equiv="Last-Modified" content="<?php echo gmdate("D, d M Y H:i:s"). " GMT";?>" />
 <link rel="shortcut icon" href="images/favicon.ico">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -19,6 +21,7 @@ require 'app/code/my_order_code.php';
 <link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css">
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="SUI-Mobile/assets/js/zepto.min.js"></script>
+<script src="update_cache.js"></script>
 </head>
 <body>
 <div class="page-group">

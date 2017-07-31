@@ -21,6 +21,8 @@ if ($_SESSION['dm_uid']) header("Location:main.php");
 <link rel="stylesheet" href="SUI-Mobile/dist/css/sm.css">
 <link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css">
 <script src="SUI-Mobile/assets/js/zepto.min.js"></script>
+<script src="update_cache.js"></script>
+
 </head>
 <body>
 <div class="page-group">

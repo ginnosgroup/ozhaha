@@ -1,2 +1,4 @@
 jsapi_ticket.php
 access_token.php
+app/config.inc.php
+app/function_core.php

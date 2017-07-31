@@ -14,6 +14,8 @@ require 'app/code/main_code.php';
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="max-age=172800" />
+<meta http-equiv="Last-Modified" content="<?php echo gmdate("D, d M Y H:i:s").' GMT';?>" /> 
 <link rel="stylesheet" href="SUI-Mobile/dist/css/sm.css">
 <link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css">
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>

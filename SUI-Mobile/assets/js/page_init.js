@@ -1,8 +1,8 @@
 ﻿var timer1 = null;
-//var order_reqtime = 10000;//订单列表更新时间 单位毫秒
-var order_reqtime = 120000; 
-var datalist_url_base = 'https://admintest.ozhaha.com/'; 
-//var datalist_url_base = 'https://admin.ozhaha.com/'; 
+var order_reqtime = 10000;//订单列表更新时间 单位毫秒
+//var order_reqtime = 120000; 
+//var datalist_url_base = 'https://admintest.ozhaha.com/'; 
+var datalist_url_base = 'https://admin.ozhaha.com/'; 
 var sc_phrase = "my secret passphrase";    
 $(function () {
   'use strict';
@@ -273,6 +273,10 @@ function getOrderList()
 		  	}else if (data.msg == 'failed')
 		  	{
 		  			$("#content-list").html("请求数据失败！");		  		
+		  	}
+		  	else if (data.msg == 'error')
+		  	{
+		  			$("#content-list").html("定位失败！");		  		
 		  	}else if (data.msg == 'expired')
 		  	{
 		  			clearInterval(timer1);

@@ -19,7 +19,7 @@ if (panda_employee_token_check($d))
 		}
 }/*else
 {
-		$arr = array("msg" => "expired","content" => "登录过期，请登录后再使用。");
+		$arr = array("msg" => "expired","content" => "登录过期，请登录后再使用。")
 		$result = json_encode($arr);
 		exit($result);
 }*/

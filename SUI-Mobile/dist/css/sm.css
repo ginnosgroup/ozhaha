@@ -2704,7 +2704,7 @@ input[type="button"].button {
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   /*z-index: 10600;*/
-  z-index:998;
+  /* z-index:998; */
   visibility: hidden;
   opacity: 0;
   -webkit-transition-duration: 400ms;
@@ -2717,7 +2717,7 @@ input[type="button"].button {
   opacity: 1;
 }
 .popup-overlay {
-  z-index: 998;
+  /* z-index: 998; */
 }
 .modal {
   width: 13.5rem;

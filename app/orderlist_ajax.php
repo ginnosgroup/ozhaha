@@ -30,8 +30,8 @@ function data_update()
 		global $dm_uid;
 		
 		$d = $_GET;
-		$_SESSION['dm_currlat'] = '-33.8726559';
-		$_SESSION['dm_currlng'] = '151.20442730000002';
+		//$_SESSION['dm_currlat'] = '-33.8726559';
+		//$_SESSION['dm_currlng'] = '151.20442730000002';
 		if ($_SESSION['dm_currlat'] && $_SESSION['dm_currlng'])
 		{
 				$data['longitude'] = $_SESSION['dm_currlng'];
@@ -57,7 +57,7 @@ function data_update()
 				}
 		}else
 		{
-				$arr = array("msg" => "failed");
+				$arr = array("msg" => "error");
 		}
 		$result = json_encode($arr);
 		exit($result);

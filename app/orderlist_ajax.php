@@ -2,7 +2,11 @@
 session_start();
 require 'config.inc.php';
 require 'function_core.php';
+require 'file_cache.php';
 
+define('HTRY_PAGE_CACHE_TIME',20*60, true);
+
+$cache = new FileCache();	
 $ac = $_GET['ac'];
 $dm_uid = $_SESSION['dm_uid'];
 $dm_token = $_SESSION['dm_token'];
@@ -10,6 +14,9 @@ $dm_status = $_SESSION['dm_status'];
 
 $d['dm_uid'] = $dm_uid;
 $d['dm_token'] = $dm_token;
+
+$cache->store(($dm_uid.'history_page'),'main.php',HTRY_PAGE_CACHE_TIME);
+
 if (panda_employee_token_check($d) && $dm_status == 'ENABLED')
 {
 		switch($ac)
@@ -30,8 +37,8 @@ function data_update()
 		global $dm_uid;
 		
 		$d = $_GET;
-		$_SESSION['dm_currlat'] = '-33.8726559';
-		$_SESSION['dm_currlng'] = '151.20442730000002';
+		//$_SESSION['dm_currlat'] = '-33.8726559';
+		//$_SESSION['dm_currlng'] = '151.20442730000002';
 		if ($_SESSION['dm_currlat'] && $_SESSION['dm_currlng'])
 		{
 				$data['longitude'] = $_SESSION['dm_currlng'];

@@ -2,8 +2,15 @@
 session_start();
 require 'app/config.inc.php';
 require 'app/function_core.php';
+require 'app/file_cache.php';
 
-if ($_SESSION['dm_uid']) header("Location:main.php");
+$cache = new FileCache();	
+
+if ($_SESSION['dm_uid']) {
+	if($cache->fetch($_SESSION['dm_uid'].'history_page'))
+		header("Location:".$cache->fetch($_SESSION['dm_uid'].'history_page'));
+	else header("Location:main.php");
+}
 ?>
 <!DOCTYPE html>
 <html>

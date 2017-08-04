@@ -16,8 +16,8 @@ require 'app/code/main_code.php';
 <meta name="format-detection" content="telephone=no">
 <meta http-equiv="Cache-Control" content="max-age=172800" />
 <meta http-equiv="Last-Modified" content="<?php echo gmdate("D, d M Y H:i:s").' GMT';?>" /> 
-<link rel="stylesheet" href="SUI-Mobile/dist/css/sm.css">
-<link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css">
+<link rel="stylesheet" href="SUI-Mobile/dist/css/sm.css?v=<?php echo gmdate("YmdH");?>">
+<link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css?v=<?php echo gmdate("YmdH");?>">
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="SUI-Mobile/assets/js/zepto.min.js"></script>
 </head>
@@ -49,7 +49,7 @@ require 'app/code/main_code.php';
 <script src="SUI-Mobile/dist/js/aes.js"></script>
 <script src="SUI-Mobile/dist/js/aes-json-format.js"></script>
 <?php include('app/include/main_gps_update.php');?>
-<script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("Ymd");?>'></script>
+<script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("YmdH");?>'></script>
 </body>
 <script>
 $(document).on('refresh', '.pull-to-refresh-content',function(e) {
@@ -62,6 +62,14 @@ $(document).on('refresh', '.pull-to-refresh-content',function(e) {
       }, 1000);
       $.initPullToRefresh('.pull-to-refresh-content');
      });
+
+// wx.ready(function () {
+//     // 在这里调用 API    
+//     //getLocation();
+//     alert('1');
+//     setInterval(alert('1'),15000); 
+// });
+
 </script>
 
 </html>

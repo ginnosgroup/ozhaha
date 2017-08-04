@@ -7,9 +7,14 @@ require 'file_cache.php';
 // set cache expire time . with 1 standing for  1s;
 define('CACHE_SAVING_TIME',2*60*60, true);
 
+define('HTRY_PAGE_CACHE_TIME',20*60, true);
+
 $cache = new FileCache();	
 $ac = $_GET['ac'];
 $dm_uid = $_SESSION['dm_uid'];
+
+$cache->store(($dm_uid.'history_page'),'my_received_order.php',HTRY_PAGE_CACHE_TIME);
+
 $dm_token = $_SESSION['dm_token'];
 $dm_status = $_SESSION['dm_status'];
 

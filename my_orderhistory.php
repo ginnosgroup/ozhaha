@@ -14,8 +14,8 @@ require 'app/code/my_orderhistory_code.php';
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link rel="stylesheet" href="SUI-Mobile/dist/css/sm.css">
-<link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css">
+<link rel="stylesheet" href="SUI-Mobile/dist/css/sm.css?v=<?php echo gmdate("YmdH");?>">
+<link rel="stylesheet" href="SUI-Mobile/dist/css/sm-extend.css?v=<?php echo gmdate("YmdH");?>">
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="SUI-Mobile/assets/js/zepto.min.js"></script>
 </head>
@@ -51,6 +51,6 @@ require 'app/code/my_orderhistory_code.php';
 <script src="SUI-Mobile/dist/js/sm.js"></script>
 <script src="SUI-Mobile/dist/js/sm-extend.js"></script>
 <?php include('app/include/main_gps_update.php');?>
-<script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("Ymd");?>'></script>
+<script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("YmdH");?>'></script>
 </body>
 </html>

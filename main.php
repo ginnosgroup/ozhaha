@@ -22,13 +22,14 @@ require 'app/code/main_code.php';
 <script src="SUI-Mobile/assets/js/zepto.min.js"></script>
 </head>
 <body>
+<?php include('app/include/main_gps_update.php');?>
 <div class="page-group">
 	<div id="page-order-list" class="page">
 	  <?php include('app/include/main_header.php');?>  	
   	<?php include('app/include/main_footer.php');?>
 
 
-  	<div class="content">
+  	<div class="content scrollable" id="scrollable">
   		<div class="content-block-title" style ='margin-top: 10px;'>附近的待接订单</div>
         <div class="content pull-to-refresh-content">
          <div class="pull-to-refresh-layer">
@@ -48,11 +49,17 @@ require 'app/code/main_code.php';
 <script src="SUI-Mobile/dist/js/sm-extend.js"></script>
 <script src="SUI-Mobile/dist/js/aes.js"></script>
 <script src="SUI-Mobile/dist/js/aes-json-format.js"></script>
-<?php include('app/include/main_gps_update.php');?>
+<script src="SUI-Mobile/dist/js/scrollfix.js"></script>
+
 <script src='SUI-Mobile/assets/js/page_init.js?v=<?php echo gmdate("YmdH");?>'></script>
 </body>
 <script>
 $(document).on('refresh', '.pull-to-refresh-content',function(e) {
+
+    var scrollable = document.getElementById("scrollable");
+    new ScrollFix(scrollable);
+
+
       setTimeout(function() {
       clearInterval(timer1);
       getOrderList();
@@ -69,7 +76,16 @@ $(document).on('refresh', '.pull-to-refresh-content',function(e) {
 //     alert('1');
 //     setInterval(alert('1'),15000); 
 // });
+// $(function(){
+//   $('.content').on('touchstart',function(){
+//     $('body').unbind('touchmove');
+//   });
+//     $('.content').on('touchend',function(){
+//     $('body').bind('touchmove');
+//   });
 
+
+//})
 </script>
 
 </html>

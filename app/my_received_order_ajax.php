@@ -45,7 +45,9 @@ function data_update()
 		{
 				$data['employeeId'] = $dm_uid;
 				$data['token'] = $dm_token;
+				var_dump($data);
 				$str_orderlist = panda_order_list_by_employee($data);
+				var_dump($str_orderlist);
 				if($str_orderlist)
 				{
 					$order_move_list = order_move_list(json_decode($str_orderlist,true));

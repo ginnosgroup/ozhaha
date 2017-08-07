@@ -1,8 +1,8 @@
 ﻿var timer1 = null;
 var order_reqtime = 10000;//订单列表更新时间 单位毫秒
 //var order_reqtime = 120000; 
-//var datalist_url_base = 'https://admintest.ozhaha.com/'; 
-var datalist_url_base = 'https://admin.ozhaha.com/'; 
+var datalist_url_base = 'https://admintest.ozhaha.com/'; 
+//var datalist_url_base = 'https://admin.ozhaha.com/'; 
 var sc_phrase = "my secret passphrase";    
 $(function () {
   'use strict';
@@ -265,10 +265,11 @@ function getOrderList()
 		  			
 		  			for ( var i=0, len=json.length ; i<len ; i++ )
 		  			{
-		  					var receiverAddress = json[i]['receiverAddressDetailed']+', '+json[i]['receiverAddress'];
+		  					var orderId = (catchAnchorId(json[i]['memo']) != 0) ? catchAnchorId(json[i]['memo']):('PID'+ json[i]['id']);
+		  					var receiverAddress = json[i]['receiverAddressDetailed']+', '+ json[i]['receiverAddress'];
 				  			var senderAddress = ((json[i]['senderAddressDetailed'] == 'null')?json[i]['senderAddressDetailed']+', ':'') + json[i]['senderAddress'];
 				  			strHtml += '<div class="card"><div class="card=content">';
-		  					strHtml = strHtml+'<li><div class="item-inner content-padded"><div class="item-title-row"><div class="item-title">id:'+json[i]['id']+'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"><span style="font-weight:bold;">店铺名:</span><a href="javascript:showAddress(\''+ json[i]['senderName'] +'\');">'+json[i]['senderName']+'</a></div><div class="item-subtitle"><span style="font-weight:bold;">店铺地址:</span><a href="javascript:showAddress(\''+senderAddress+'\');">'+senderAddress+'</a></div><div class="item-subtitle" style="whiteSpace:normal"><span style="font-weight:bold;">收件人地址:</span><a href="javascript:showAddress(\''+receiverAddress+'\');">'+receiverAddress+'</a></div><div class="item-text">'+'<span style="font-weight:bold;">配送距离:</span><span>'+json[i]['distance']+'km;</span>&nbsp;&nbsp;'+ '<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'</div><div class="item-subtitle"><span style="font-weight:bold;">其它备注:</span>'+json[i]['memo']+'</div><div class="item-subtitle" style="margin-top:10px"><div class="item-text "><a href="javascript:receive_order(\''+json[i]['code']+'\',\''+json[i]['name']+'\');" id="order_'+json[i]['id']+'" class="button button-fill">抢单</a></div></div></li>';
+		  					strHtml = strHtml+'<li><div class="item-inner content-padded"><div class="item-title-row"><div class="item-title">id:'+ orderId +'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"><span style="font-weight:bold;">店铺名:</span><a href="javascript:showAddress(\''+ json[i]['senderName'] +'\');">'+json[i]['senderName']+'</a></div><div class="item-subtitle"><span style="font-weight:bold;">店铺地址:</span><a href="javascript:showAddress(\''+senderAddress+'\');">'+senderAddress+'</a></div><div class="item-subtitle" style="whiteSpace:normal"><span style="font-weight:bold;">收件人地址:</span><a href="https://maps.google.com/?q='+receiverAddress+'">'+receiverAddress+'</a></div><div class="item-text">'+'<span style="font-weight:bold;">配送距离:</span><span>'+json[i]['distance']+'km;</span>&nbsp;&nbsp;'+ '<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'</div><div class="item-subtitle"><span style="font-weight:bold;">其它备注:</span>'+json[i]['memo']+'</div><div class="item-subtitle" style="margin-top:10px"><div class="item-text "><a href="javascript:receive_order(\''+json[i]['code']+'\',\''+json[i]['name']+'\');" id="order_'+json[i]['id']+'" class="button button-fill">抢单</a></div></div></li>';
 		  					strHtml += '</div></div></div>';
 		  			}
 		  			strHtml = strHtml+'</ul>';
@@ -280,7 +281,7 @@ function getOrderList()
 		  	else if (data.msg == 'error')
 		  	{
 		  			$("#content-list").html("定位失败！");	
-		  			getOrderList();
+		  			//getOrderList();
 
 		  	}else if (data.msg == 'expired')
 		  	{
@@ -296,6 +297,8 @@ function getOrderList()
 
 function receive_order(ordercode,name)
 {
+		
+		$.confirm('确认接单 '+ name + '?','确认?',function(){
 		clearInterval(timer1);
 		$.showPreloader('正在抢这个订单...');
 		var strUrl = "app/order_ajax.php?ac=receive&order_code="+ordercode+"&name="+name+"&random="+Math.random();
@@ -327,6 +330,7 @@ function receive_order(ordercode,name)
 		  },
 		  dataType: 'json'
 		});
+	})
 }
 /* main.php  end */
 
@@ -346,10 +350,12 @@ function getMyReceivedOrderList()
 				  			$.hidePreloader();
 				  			var strHtml = '<ul>';
 				  			var json = $.parseJSON(data.content);
+				  			console.log(json);
 
 				  			
 				  			for ( var i=0, len=json.length ; i<len ; i++ )
 				  			{
+				  					var orderId = (catchAnchorId(json[i]['memo']) != 0) ? catchAnchorId(json[i]['memo']):('PID'+ json[i]['id']);
 				  					var receiverAddress = json[i]['receiverAddressDetailed']+', '+json[i]['receiverAddress'];
 				  					var senderAddress = ((json[i]['senderAddressDetailed'] == 'null')?json[i]['senderAddressDetailed']+', ':'') + json[i]['senderAddress'];
 				  					var lat = json[i]['senderAddressLat'];
@@ -357,12 +363,12 @@ function getMyReceivedOrderList()
 				  					if (json[i]['payCode'] == null ) json[i]['payCode'] = '';
 				  					var payType = strPayType(json[i]['payType']);
                      
-				  					if(json[i]['status'] != 'CANCEL'&&json[i]['status'] != 'COMPLETE')
+				  					if(json[i]['status'] != 'CANCEL'&& json[i]['status'] != 'COMPLETE')
 									{
 									strHtml += '<div class="card"><div class="card=content">';	
 									strHtml = strHtml+'<li>';
                                     strHtml +='<div class="item-inner content-padded"><div class="item-title-row">';
-				  					strHtml +='<div class="item-title" id='+ json[i]['id'] + '>id:'+json[i]['id']+'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"style="white-space:normal!important"><span style="font-weight:bold;">店铺:</span><a href="javascript:showAddress(\''+ senderAddress +'\'">'+json[i]['senderName']+'</a></div><div class="receiverHightlight" style="border:1px solid #ff9500;"><div class="item-subtitle"><span style="font-weight:bold;">收件人:</span>'+json[i]['receiverName']+'&nbsp;&nbsp;</div><div class="item-subtitle"><span style="font-weight:bold;">收件人电话:</span><a href="tel:'+json[i]['receiverPhone']+'">'+json[i]['receiverPhone']+'</a></div><div class="item-subtitle"style="white-space:normal!important"><span style="font-weight:bold;">收件人地址:</span><a href="https://maps.google.com/?q='+receiverAddress+'">'+receiverAddress+'</a></div></div><div class="item-subtitle">'+'<span style="font-weight:bold;">配送距离:</span>'+json[i]['distance'] +'km;&nbsp;&nbsp;<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'</div>';
+				  					strHtml +='<div class="item-title" id='+ json[i]['id'] + '>id:'+ orderId +'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"style="white-space:normal!important"><span style="font-weight:bold;">店铺:</span><a href="javascript:showAddress(\''+ senderAddress +'\');">'+json[i]['senderName']+'</a></div><div class="receiverHightlight" style="border:1px solid #ff9500;"><div class="item-subtitle"><span style="font-weight:bold;">收件人:</span>'+json[i]['receiverName']+'&nbsp;&nbsp;</div><div class="item-subtitle"><span style="font-weight:bold;">收件人电话:</span><a href="tel:'+json[i]['receiverPhone']+'">'+json[i]['receiverPhone']+'</a></div><div class="item-subtitle"style="white-space:normal!important"><span style="font-weight:bold;">收件人地址:</span><a href="https://maps.google.com/?q='+receiverAddress+'">'+receiverAddress+'</a></div></div><div class="item-subtitle">'+'<span style="font-weight:bold;">配送距离:</span>'+json[i]['distance'] +'km;&nbsp;&nbsp;<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'</div>';
 
         	  						strHtml += '<div class="item-subtitle"><span style="font-weight:bold;">配送状态:</span>'+json[i]['status']+'</div>';
         	  						strHtml += '<div class="item-subtitle"><span style="font-weight:bold;">支付类型:</span>'+ payType +'&nbsp;&nbsp;<span style="font-weight:bold;">支付编码:</span>'+json[i]['payCode']+'</div>';
@@ -406,10 +412,17 @@ function getMyReceivedOrderList()
 function catchAnchorId(st)
 {
 	
+	if(!st) { return 0;}
 	var tmpP = st.indexOf('order_id=');
-	var id = st.substring(tmpP+9,tmpP+16);
-
+	if(tmpP!=-1)
+	{
+		var id = st.substring(tmpP+9,tmpP+16);
 	return id;
+	}
+	else 
+	{
+		return 0;
+	}
 
 }
 
@@ -505,6 +518,7 @@ function getMyOrderList()
 				  			
 				  			for ( var i=0, len=json.length ; i<len ; i++ )
 				  			{
+				  					var orderId = (catchAnchorId(json[i]['memo']) != 0) ? catchAnchorId(json[i]['memo']):('PID'+ json[i]['id']);
 				  					var receiverAddress = json[i]['receiverAddressDetailed']+', '+json[i]['receiverAddress'];
 				  					var senderAddress = ((json[i]['senderAddressDetailed'] == 'null')?json[i]['senderAddressDetailed']+', ':'') + json[i]['senderAddress'];
 				  					var lat = json[i]['senderAddressLat'];
@@ -519,7 +533,7 @@ function getMyOrderList()
 									strHtml += '<div class="card"><div class="card=content">';	
 									strHtml = strHtml+'<li>';
                                     strHtml +='<div class="item-inner content-padded"><div class="item-title-row">';
-				  					strHtml +='<div class="item-title" id='+ json[i]['id'] + '>id:'+json[i]['id']+'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"style="white-space:normal!important"><span style="font-weight:bold;">店铺:</span><a href="javascript:showAddress(\''+senderAddress +'\');">'+json[i]['senderName']+'</a></div><div class="receiverHightlight" style="border:1px solid #ff9500;"><div class="item-subtitle"><span style="font-weight:bold;">收件人:</span>'+json[i]['receiverName']+'&nbsp;&nbsp;</div><div class="item-subtitle"><span style="font-weight:bold;">收件人电话:</span><a href="tel:'+json[i]['receiverPhone']+'">'+json[i]['receiverPhone']+'</a></div><div class="item-subtitle" style="white-space:normal!important"><span class="" style="font-weight:bold;">收件人地址:</span><a href="https://maps.google.com/?q='+receiverAddress+'">'+receiverAddress+'</a></div></div><div class="item-subtitle"><span style="font-weight:bold;">配送距离:</span><span>'+json[i]['distance']+'km;</span>&nbsp;&nbsp;<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'</div>';
+				  					strHtml +='<div class="item-title" id='+ json[i]['id'] + '>id:'+ orderId +'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"style="white-space:normal!important"><span style="font-weight:bold;">店铺:</span><a href="javascript:showAddress(\''+senderAddress +'\');">'+json[i]['senderName']+'</a></div><div class="receiverHightlight" style="border:1px solid #ff9500;"><div class="item-subtitle"><span style="font-weight:bold;">收件人:</span>'+json[i]['receiverName']+'&nbsp;&nbsp;</div><div class="item-subtitle"><span style="font-weight:bold;">收件人电话:</span><a href="tel:'+json[i]['receiverPhone']+'">'+json[i]['receiverPhone']+'</a></div><div class="item-subtitle" style="white-space:normal!important"><span class="" style="font-weight:bold;">收件人地址:</span><a href="https://maps.google.com/?q='+receiverAddress+'">'+receiverAddress+'</a></div></div><div class="item-subtitle"><span style="font-weight:bold;">配送距离:</span><span>'+json[i]['distance']+'km;</span>&nbsp;&nbsp;<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'</div>';
 
         	  						strHtml += '<div class="item-subtitle"><span style="font-weight:bold;">配送状态:</span>'+json[i]['status']+'</div>';
         	  						strHtml += '<div class="item-subtitle"><span style="font-weight:bold;">支付类型:</span>'+ '<span style ="color:#f6383a">'+ payType +'</span>&nbsp;&nbsp;<span style="font-weight:bold;">支付编码:</span>'+json[i]['payCode']+'</div>';
@@ -532,7 +546,7 @@ function getMyOrderList()
                                   if(json[i]['status']!='CANCEL')
                                   {	
 
-                                   if(json[i]['payType'] !='PAYPAL')
+                                   if(json[i]['payType'] !='PAYPAL'&&json[i]['payType'] !='WECHAT')
                                    {
                                    
                                    if(json[i]['payCode']!='')
@@ -790,6 +804,7 @@ function getMyOrderHistoryList(day)
 				  			
 				  			for ( var i=0, len=json.length ; i<len ; i++ )
 				  			{
+				  				var orderId = (catchAnchorId(json[i]['memo']) != 0) ? catchAnchorId(json[i]['memo']):('PID'+ json[i]['id']);
 				  				var receiverAddress = json[i]['receiverAddressDetailed']+', '+json[i]['receiverAddress'];
 				  				var senderAddress = ((json[i]['senderAddressDetailed'] == 'null')?json[i]['senderAddressDetailed']+', ':'') + json[i]['senderAddress'];
           						var payType = strPayType(json[i]['payType']);
@@ -798,7 +813,7 @@ function getMyOrderHistoryList(day)
 				  					//<span style="font-weight:bold;">电话:</span><a href="tel:'+json[i]['senderPhone']+'">'+json[i]['senderPhone']+'</a>     
 						  		if (json[i]['payCode'] == null ) json[i]['payCode'] = '';
 						  			strHtml += '<div class="card"><div class="card=content">';	
-						  			strHtml = strHtml+'<li><div class="item-inner content-padded"><div class="item-title-row"><div class="item-title">id:'+json[i]['id']+'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"><span style="font-weight:bold;">店铺:</span>'+json[i]['senderName']+'&nbsp;&nbsp;</div><div class="item-subtitle"><span style="font-weight:bold;">店铺地址:</span><a href="javascript:showAddress(\''+ senderAddress +'\');">'+ senderAddress +'</a></div><div class="item-subtitle"><span style="font-weight:bold;">收件人:</span>'+json[i]['receiverName']+'&nbsp;&nbsp;<span style="font-weight:bold;">收件人电话:</span><a href="tel:'+json[i]['receiverPhone']+'">'+json[i]['receiverPhone']+'</a></div><div class="item-subtitle"><span style="font-weight:bold;">收件人地址:</span><a href="javascript:showAddress(\''+ receiverAddress +'\');">'+receiverAddress+'</a></div><div class="item-subtitle"><span style="font-weight:bold;">重量:</span><span style="color:blue;">'+json[i]['weight']+'kg</span>&nbsp;&nbsp;<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'<div class="item-subtitle"><span style="font-weight:bold;">配送状态:</span>'+json[i]['status']+'</div>'+'</div><div class="item-subtitle"><span style="font-weight:bold;">支付类型:</span>'+payType+'&nbsp;&nbsp;<span style="font-weight:bold;">支付编码:</span>'+json[i]['payCode']+'</div><div class="item-subtitle"><span style="font-weight:bold;">其它备注:</span>'+json[i]['memo']+'</div></div></li>';
+						  			strHtml = strHtml+'<li><div class="item-inner content-padded"><div class="item-title-row"><div class="item-title">id:'+orderId+'</div><div class="item-after">'+formatDate(json[i]['createDate'])+'</div></div><div class="item-subtitle"><span style="font-weight:bold;">订单名称:</span>'+json[i]['name']+'</div><div class="item-subtitle"><span style="font-weight:bold;">店铺:</span>'+json[i]['senderName']+'&nbsp;&nbsp;</div><div class="item-subtitle"><span style="font-weight:bold;">店铺地址:</span><a href="javascript:showAddress(\''+ senderAddress +'\');">'+ senderAddress +'</a></div><div class="item-subtitle"><span style="font-weight:bold;">收件人:</span>'+json[i]['receiverName']+'&nbsp;&nbsp;<span style="font-weight:bold;">收件人电话:</span><a href="tel:'+json[i]['receiverPhone']+'">'+json[i]['receiverPhone']+'</a></div><div class="item-subtitle"><span style="font-weight:bold;">收件人地址:</span><a href="javascript:showAddress(\''+ receiverAddress +'\');">'+receiverAddress+'</a></div><div class="item-subtitle"><span style="font-weight:bold;">重量:</span><span style="color:blue;">'+json[i]['weight']+'kg</span>&nbsp;&nbsp;<span style="font-weight:bold;">备注:</span>'+json[i]['note']+'<div class="item-subtitle"><span style="font-weight:bold;">配送状态:</span>'+json[i]['status']+'</div>'+'</div><div class="item-subtitle"><span style="font-weight:bold;">支付类型:</span>'+payType+'&nbsp;&nbsp;<span style="font-weight:bold;">支付编码:</span>'+json[i]['payCode']+'</div><div class="item-subtitle"><span style="font-weight:bold;">其它备注:</span>'+json[i]['memo']+'</div></div></li>';
 						  			strHtml += '</div></div>';
 				  					//}
 				  			}
@@ -956,7 +971,8 @@ var payTypeMap = {
 'RECEIVER':'到付',
 'PAYPAL':'PAYPAL支付',
 'SENDER':'SENDER',
-'EWAY':'EWAY'
+'EWAY':'EWAY',
+'WECHAT':'微信支付'
 
 };
 

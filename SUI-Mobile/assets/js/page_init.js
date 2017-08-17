@@ -1,8 +1,6 @@
 ﻿var timer1 = null;
 var order_reqtime = 10000;//订单列表更新时间 单位毫秒
-//var order_reqtime = 120000; 
 var datalist_url_base = 'https://admintest.ozhaha.com/'; 
-//var datalist_url_base = 'https://admin.ozhaha.com/'; 
 var sc_phrase = "my secret passphrase";    
 $(function () {
   'use strict';
@@ -47,7 +45,6 @@ $(function () {
 					  	{
 					  			//console.log(data.pss);
 					  			createCookie('password',data.pss,1);
-					  			console.log('66');
 					  			$.showPreloader('identity authenticated...');
 					  			location.href = 'main.php';
 					  	}else if (data.msg == 'failed')
@@ -280,8 +277,8 @@ function getOrderList()
 		  	}
 		  	else if (data.msg == 'error')
 		  	{
-		  			$("#content-list").html("定位失败！");	
-		  			//getOrderList();
+		  			//$("#content-list").html("定位失败！");	
+		  			getOrderList();
 
 		  	}else if (data.msg == 'expired')
 		  	{
@@ -350,7 +347,6 @@ function getMyReceivedOrderList()
 				  			$.hidePreloader();
 				  			var strHtml = '<ul>';
 				  			var json = $.parseJSON(data.content);
-				  			console.log(json);
 
 				  			
 				  			for ( var i=0, len=json.length ; i<len ; i++ )
@@ -361,6 +357,7 @@ function getMyReceivedOrderList()
 				  					var lat = json[i]['senderAddressLat'];
 				  					var lng = json[i]['senderAddressLon'];
 				  					if (json[i]['payCode'] == null ) json[i]['payCode'] = '';
+									if(json[i]['memo'])json[i]['memo'] = json[i]['memo'].replaceAll('\\', '');
 				  					var payType = strPayType(json[i]['payType']);
                      
 				  					if(json[i]['status'] != 'CANCEL'&& json[i]['status'] != 'COMPLETE')
@@ -477,6 +474,7 @@ function ConfirmPickUp(){
 		}
 	});
 	 $.closeModal();
+	alert('请在 ‘我正在配送’ 界面继续该单操作'); 
 	clearPopupInputs();
  	getMyReceivedOrderList();
 	timer1 = setInterval("getMyReceivedOrderList()",order_reqtime);
@@ -524,7 +522,8 @@ function getMyOrderList()
 				  					var lat = json[i]['senderAddressLat'];
 				  					var lng = json[i]['senderAddressLon'];
 				  					if (json[i]['payCode'] == null ) json[i]['payCode'] = '';
-				  					if (json[i]['memo'] == null ) json[i]['memo'] = '';
+				  					if(json[i]['memo'])json[i]['memo'] = json[i]['memo'].replaceAll('\\', '');
+									if (json[i]['memo'] == null ) json[i]['memo'] = '';
 			
 				  					var payType = strPayType(json[i]['payType']);
                         			//<div class="item-subtitle"><span style="font-weight:bold;">电话:</span><a href="tel:'+json[i]['senderPhone']+'">'+json[i]['senderPhone']+'</a></div>
@@ -593,49 +592,8 @@ function getMyOrderList()
 }
 
 function cancel_order(ordercode,name)//取消配送订单
-{
-		//clearInterval(timer1);
-		//$.showPreloader('正在取消这个订单...');
-	//var strUrl = "app/order_ajax.php?ac=cancel&order_code="+ordercode+"&name="+name+"&random="+Math.random();
-	// var str = "<iframe height=800 allowTransparency=true" + ' style="width:100%;border:none;overflow:auto;" frameborder="0" src="http://au.mikecrm.com/44vbt2S">' +"</iframe>";
-	// document.location = "http://au.mikecrm.com/44vbt2S?order_id ='hahahah'";
-	// c = url.searchParams.get('order_id');
-	 //$('input[data-reactid=".0.0.0:$c200005851.1.0.0.2"]').val('haha');
-	// alert('c');
-		//return str;
-		//alert(str);
-		// $.ajax({
-		//   type: "GET",
-		//   url: strUrl,
-		//   data: '',
-		//   success: function(data){		  	
-		//   	if (data.msg == 'ok')
-		//   	{
-		//   			$.hidePreloader();
-		//   			$.alert(data.content, function () {
-		// 	        getMyOrderList();			        
-		// 	      });		
-		//   	}else if (data.msg == 'failed')
-		//   	{		  					  				
-		//   			$.hidePreloader();
-		//   			$.alert(data.content);
-		//   			getMyOrderList();
-		//   	}else if (data.msg == 'expired')
-		//   	{
-		//   			clearInterval(timer1);
-		//   			$.alert(data.content, function () {
-		// 	        location.href = 'logout.php';		        
-		// 	      });	  		
-		//   	} 	
-		//   },
-		//   error:function(err){
-		//   	  $.hidePreloader();
-  //             console.log(err.responseText);
-
-		//   },
-		//   dataType: 'json'
-		// });
-	 alert('配送员无法取消订单，取消订单请于管理后台联系！！');
+{	
+	alert('配送员无法取消订单，取消订单请于管理后台联系！！');
 }
 
 function done_order(ordercode,name,paycode)//确认送达
@@ -673,7 +631,7 @@ function done_order(ordercode,name,paycode)//确认送达
 				  },
 				  error: function(err){
 				  	$.hidePreloader();
-                    $console.log(err.responseText);
+                    console.log(err.responseText);
 					getMyOrderList();
 					timer1 = setInterval("getMyOrderList()",order_reqtime);
 					      
@@ -808,6 +766,7 @@ function getMyOrderHistoryList(day)
 				  				var receiverAddress = json[i]['receiverAddressDetailed']+', '+json[i]['receiverAddress'];
 				  				var senderAddress = ((json[i]['senderAddressDetailed'] == 'null')?json[i]['senderAddressDetailed']+', ':'') + json[i]['senderAddress'];
           						var payType = strPayType(json[i]['payType']);
+								if(json[i]['memo'])json[i]['memo'] = json[i]['memo'].replaceAll('\\', '');
 				  					//if (json[i]['status'] == 'DELIVERY')
 				  					//{
 				  					//<span style="font-weight:bold;">电话:</span><a href="tel:'+json[i]['senderPhone']+'">'+json[i]['senderPhone']+'</a>     
@@ -1016,4 +975,9 @@ function decrpyt(val, str)
 {
 	return JSON.parse(CryptoJS.AES.decrypt(val, str, {format: CryptoJSAesJson}).toString(CryptoJS.enc.Utf8));
 }
+
+String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+};
 //End
